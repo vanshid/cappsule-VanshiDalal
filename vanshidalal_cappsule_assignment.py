@@ -7,32 +7,37 @@ Original file is located at
     https://colab.research.google.com/drive/1D_zBeiHWXK3iLDjcqPvshltIcmnTNQ78
 """
 
+#mounting the drive for files
 from google.colab import drive
 drive.mount('/content/drive')
 
 import pandas as pd
  
-
+#reading files in different file format
 master = pd.read_excel('master.xlsx')
 test = pd.read_csv('test.csv')
 
-print(test)
 
+
+#Remove spaces from columns index for better manipulation
 master.rename(columns={'S No.':'S_No','Product ID':'Product_ID','Item name':'Item_Name'},
 inplace=True)
 test.rename(columns={'S No.':'S_No','Item Name':'Item_Name'},inplace=True)
 print(test)
 
+#Converting sheets into DataFrame 
 master_df = pd.DataFrame(master)
 test_df = pd.DataFrame(test)
 
+#displaying the dfs after conversion
 test_df
-
 master_df
 
+#extracted Column ID from master to test and joining it into a new DF
 extracted_col = master_df["Product_ID"]
 output = test_df.join(extracted_col)
 print(output)
 
+#Generating a new excel file from the extracted the DF
 data_with_product_id = pd.DataFrame(output) 
 data_with_product_id.to_excel("output.xlsx")
